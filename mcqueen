@@ -1,0 +1,341 @@
+//AUTOCROSS CODE  
+
+  #include <Arduino.h>
+#include <TimerOne.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_HMC5883_U.h>
+
+// Your existing robot control variables
+int rot;
+unsigned int counter = 0;
+
+// Compass module setup
+Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
+
+void STOP() {
+  digitalWrite(2, HIGH);
+  digitalWrite(4, HIGH);
+  digitalWrite(7, HIGH);
+  digitalWrite(8, HIGH);
+  analogWrite(5, 0);
+  analogWrite(6, 0);
+}
+
+void docount() {
+  counter++;
+}
+
+void timerIsr() {
+  Timer1.detachInterrupt();
+  Serial.print(" MOTOR SPEED :  ");
+  int rotation = (counter / 20); // divide by the number of holes on the disk
+  Serial.print(rotation, DEC);
+  rot = rotation;
+  Serial.println(" RPS");
+  counter = 0;
+  Timer1.attachInterrupt(timerIsr); // enable the timer1 interrupt again
+}
+
+void setup() {
+  Serial.begin(9600);
+  Timer1.initialize(1000000);
+  attachInterrupt(0, docount, RISING);
+  Timer1.attachInterrupt(timerIsr);
+
+  if (!mag.begin()) {
+    Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
+    while (1);
+  }
+}
+
+float getHeading() {
+  sensors_event_t event;
+  mag.getEvent(&event);
+  float heading = (atan2(event.magnetic.y, event.magnetic.x) * 180) / PI;
+  if (heading < 0) heading += 360;
+  return heading;
+}
+
+void Rotate_Left(int car_speed) {
+  digitalWrite(2, LOW);
+  digitalWrite(4, HIGH);
+  digitalWrite(7, HIGH);
+  digitalWrite(8, LOW);
+  analogWrite(5, car_speed);
+  analogWrite(6, car_speed);
+}
+void Rotate_Right(int car_speed) {
+  digitalWrite(2, HIGH);
+  digitalWrite(4, LOW);
+  digitalWrite(7, LOW);
+  digitalWrite(8, HIGH);
+  analogWrite(5, car_speed);
+  analogWrite(6, car_speed);
+}
+void Rotate_To_Heading(float target_heading, int car_speed, unsigned long timeoutMillis) {
+  unsigned long startTime = millis();
+  float current_heading = getHeading();
+
+  while (abs(current_heading - target_heading) > 2) { // 2 degrees tolerance
+    current_heading = getHeading();
+    int heading_difference = target_heading - current_heading;
+
+    // Adjust the rotation direction based on heading difference
+    if (heading_difference > 180) {
+      Rotate_Left(car_speed);
+    } else {
+      Rotate_Right(car_speed);
+    }
+
+    Serial.print("Current Heading: ");
+    Serial.println(current_heading);
+
+    // Check for timeout
+    if (millis() - startTime > timeoutMillis) {
+      Serial.println("Rotation timeout reached. Exiting.");
+      STOP();
+      break;
+    }
+  }
+  STOP();
+}
+// Adjusted functions to consider heading while moving forward or rotating left
+void Move_Forward(int adjusted_lmcar_speed,int adjusted_rmcar_speed, float target_heading) {
+  float current_heading = getHeading();
+  int heading_difference = target_heading - current_heading;
+
+  // Adjust the movement direction based on heading difference
+  if (heading_difference > 180) {
+    digitalWrite(2, LOW);
+    digitalWrite(4, HIGH);
+    digitalWrite(7, LOW);
+    digitalWrite(8, HIGH);
+  } else {
+    digitalWrite(2, HIGH);
+    digitalWrite(4, LOW);
+    digitalWrite(7, HIGH);
+    digitalWrite(8, LOW);
+  }
+
+  analogWrite(5, adjusted_lmcar_speed);
+  analogWrite(6, adjusted_rmcar_speed);
+}
+
+
+void Adjust_Speeds_For_Straight_Motion(int lmcar_speed, int rmcar_speed, float target_heading) {
+  // Get the current heading
+  float current_heading = getHeading();
+
+  // Calculate the heading difference
+  int heading_difference = target_heading - current_heading;
+
+  // Calculate the speed adjustment factor based on heading difference
+  float adjustment_factor = 1.0 - (abs(heading_difference) / 180.0);
+
+  // Adjust the motor speeds based on the factor
+  int adjusted_lmcar_speed = lmcar_speed * adjustment_factor;
+  int adjusted_rmcar_speed = rmcar_speed * adjustment_factor;
+  
+Move_Forward(adjusted_lmcar_speed, adjusted_rmcar_speed, target_heading);
+}
+
+
+void loop() {
+  // Navigate to the first corner
+  Adjust_Speeds_For_Straight_Motion(245, 255, getHeading()); // Pass the current heading as the target heading
+  delay(9064); // Move forward for a specific time or distance
+  STOP();
+
+  // Rotate to the next heading, e.g., 90 degrees for east
+  Rotate_To_Heading(90, 255, 500);
+
+  // Navigate to the next corner
+  Adjust_Speeds_For_Straight_Motion(245, 255, getHeading()); // Pass the current heading as the target heading
+  delay(14832); // Adjust time or use distance measurement
+  STOP();
+
+  // Rotate to the next heading, e.g., 180 degrees for South
+  Rotate_To_Heading(90, 255, 500);
+
+  Adjust_Speeds_For_Straight_Motion(245, 255, getHeading()); // Pass the current heading as the target heading
+  delay(18128); // Move forward for a specific time or distance
+  STOP();
+  Rotate_To_Heading(90, 255, 500);
+  Adjust_Speeds_For_Straight_Motion(245, 255, getHeading()); // Pass the current heading as the target heading
+  delay(14832); // Move forward for a specific time or distance
+  STOP();
+  Rotate_To_Heading(90, 255, 500);
+  Adjust_Speeds_For_Straight_Motion(245, 255, getHeading()); // Pass the current heading as the target heading
+  delay(9064); // Move forward for a specific time or distance
+  STOP();
+  delay(100000); // Adjust as needed
+}
+
+
+
+//SKID TEST 
+#include <Arduino.h>
+#include <TimerOne.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_HMC5883_U.h>
+
+// Your existing robot control variables
+int rot;
+unsigned int counter = 0;
+
+// Compass module setup
+Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
+
+void STOP() {
+  digitalWrite(2, HIGH);
+  digitalWrite(4, HIGH);
+  digitalWrite(7, HIGH);
+  digitalWrite(8, HIGH);
+  analogWrite(5, 0);
+  analogWrite(6, 0);
+}
+
+void docount() {
+  counter++;
+}
+
+void timerIsr() {
+  Timer1.detachInterrupt();
+  Serial.print(" MOTOR SPEED :  ");
+  int rotation = (counter / 20); // divide by the number of holes on the disk
+  Serial.print(rotation, DEC);
+  rot = rotation;
+  Serial.println(" RPS");
+  counter = 0;
+  Timer1.attachInterrupt(timerIsr); // enable the timer1 interrupt again
+}
+
+void setup() {
+  Serial.begin(9600);
+  Timer1.initialize(1000000);
+  attachInterrupt(0, docount, RISING);
+  Timer1.attachInterrupt(timerIsr);
+
+  if (!mag.begin()) {
+    Serial.println("Ooops, no HMC5883 detected ... Check your wiring!");
+    while (1);
+  }
+}
+
+float getHeading() {
+  sensors_event_t event;
+  mag.getEvent(&event);
+  float heading = (atan2(event.magnetic.y, event.magnetic.x) * 180) / PI;
+  if (heading < 0) heading += 360;
+  return heading;
+}
+
+void Rotate_Left(int car_speed) {
+  digitalWrite(2, LOW);
+  digitalWrite(4, HIGH);
+  digitalWrite(7, HIGH);
+  digitalWrite(8, LOW);
+  analogWrite(5, car_speed);
+  analogWrite(6, car_speed);
+}
+void Rotate_Right(int car_speed) {
+  digitalWrite(2, HIGH);
+  digitalWrite(4, LOW);
+  digitalWrite(7, LOW);
+  digitalWrite(8, HIGH);
+  analogWrite(5, car_speed);
+  analogWrite(6, car_speed);
+}
+void Rotate_To_Heading(float target_heading, int car_speed, unsigned long timeoutMillis) {
+  unsigned long startTime = millis();
+  float current_heading = getHeading();
+
+  while (abs(current_heading - target_heading) > 2) { // 2 degrees tolerance
+    current_heading = getHeading();
+    int heading_difference = target_heading - current_heading;
+
+    // Adjust the rotation direction based on heading difference
+    if (heading_difference > 180) {
+      Rotate_Left(car_speed);
+    } else {
+      Rotate_Right(car_speed);
+    }
+
+    Serial.print("Current Heading: ");
+    Serial.println(current_heading);
+
+    // Check for timeout
+    if (millis() - startTime > timeoutMillis) {
+      Serial.println("Rotation timeout reached. Exiting.");
+      STOP();
+      break;
+    }
+  }
+  STOP();
+}
+// Adjusted functions to consider heading while moving forward or rotating left
+void Move_Forward(int adjusted_lmcar_speed,int adjusted_rmcar_speed, float target_heading) {
+  float current_heading = getHeading();
+  int heading_difference = target_heading - current_heading;
+
+  // Adjust the movement direction based on heading difference
+  if (heading_difference > 180) {
+    digitalWrite(2, LOW);
+    digitalWrite(4, HIGH);
+    digitalWrite(7, LOW);
+    digitalWrite(8, HIGH);
+  } else {
+    digitalWrite(2, HIGH);
+    digitalWrite(4, LOW);
+    digitalWrite(7, HIGH);
+    digitalWrite(8, LOW);
+  }
+
+  analogWrite(5, adjusted_lmcar_speed);
+  analogWrite(6, adjusted_rmcar_speed);
+}
+
+
+void Adjust_Speeds_For_Straight_Motion(int lmcar_speed, int rmcar_speed, float target_heading) {
+  // Get the current heading
+  float current_heading = getHeading();
+
+  // Calculate the heading difference
+  int heading_difference = target_heading - current_heading;
+
+  // Calculate the speed adjustment factor based on heading difference
+  float adjustment_factor = 1.0 - (abs(heading_difference) / 180.0);
+
+  // Adjust the motor speeds based on the factor
+  int adjusted_lmcar_speed = lmcar_speed * adjustment_factor;
+  int adjusted_rmcar_speed = rmcar_speed * adjustment_factor;
+  
+Move_Forward(adjusted_lmcar_speed, adjusted_rmcar_speed, target_heading);
+}
+
+
+void loop() {
+  // Navigate to the first corner
+  Adjust_Speeds_For_Straight_Motion(245, 255, getHeading()); // Pass the current heading as the target heading
+  delay(9064); // Move forward for a specific time or distance
+  STOP();
+
+  // Rotate to the next heading, e.g., 90 degrees for east
+  Rotate_To_Heading(90, 255, 500);
+
+  // Navigate to the next corner
+  Adjust_Speeds_For_Straight_Motion(245, 255, getHeading()); // Pass the current heading as the target heading
+  delay(1648); // Adjust time or use distance measurement
+  STOP();
+
+  // Rotate to the next heading, e.g., 180 degrees for South
+  Rotate_To_Heading(90, 255, 500);
+
+  Adjust_Speeds_For_Straight_Motion(245, 255, getHeading()); // Pass the current heading as the target heading
+  delay(9064); // Move forward for a specific time or distance
+  STOP();
+
+  delay(100000); // Adjust as needed
+}

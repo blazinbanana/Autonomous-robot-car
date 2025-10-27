@@ -261,8 +261,11 @@ Real-time control systems study
 ---
 ### 📜 License & Usage
 
-This project is licensed under the MIT License — see the LICENSE file for details.
-For academic or research use, please cite this repository appropriately.
+This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for full details.
+
+You are free to use, modify, and distribute this code for **educational, research, or personal projects**, provided proper attribution is given to **Caleb Maina**.
+
+> © 2025 Caleb Maina. All rights reserved.
 
 ---
 ---

@@ -27,7 +27,12 @@
 - [🙏 Acknowledgments](#-acknowledgments)
 
 ---
+<div align="center">
 
+### 🎬 Watch the Demo on YouTube  
+[![Watch the video](https://img.shields.io/badge/▶️%20Watch%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)]([https://www.youtube.com/watch?v=YOUR_VIDEO_ID](https://www.youtube.com/watch?v=UFfWSkCVyeM))
+
+</div>
 ## 🚀 Project Overview
 This repository contains the complete source code for our **1st Place winning autonomous navigation system** that dominated the class robotics competition.  
 The system implements **advanced sensor fusion algorithms** and **real-time control systems** to achieve **sub-2cm precision** in autonomous course navigation.

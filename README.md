@@ -104,7 +104,7 @@ Timer One Library
 ---
 
 ---
-###🔌 Hardware Setup
+### 🔌 Hardware Setup
 Motor Connections
 ```
 Left Motor:  Pins 2, 4, 5 (IN1, IN2, PWM)

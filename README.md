@@ -91,18 +91,20 @@ SENSOR INPUT → DATA FUSION → DECISION MAKING → MOTOR CONTROL → FEEDBACK 
 
 ```
 ---
-###⚡ Installation & Setup
+---
+### ⚡ Installation & Setup
 🧰 Prerequisites
 
 Arduino IDE 1.8.19 or later
 
 Adafruit HMC5883 Unified Library
 
-TimerOne Library
+Timer One Library
+
 ---
 
+---
 ###🔌 Hardware Setup
-
 Motor Connections
 ```
 Left Motor:  Pins 2, 4, 5 (IN1, IN2, PWM)
@@ -116,7 +118,8 @@ Compass: I2C (SDA - A4, SCL - A5)
 Encoder: Interrupt Pin 2
 ```
 ---
-###📦 Library Installation
+---
+### 📦 Library Installation
 
 #include <Arduino.h>
 #include <TimerOne.h>
@@ -130,6 +133,8 @@ Install via Arduino Library Manager:
 Search “Adafruit HMC5883 Unified”
 
 Search “TimerOne”
+
+---
 ---
 ### 🧭 Calibration Procedure
 ```
@@ -150,6 +155,7 @@ void setup() {
 }
 
 ```
+---
 ---
 ### 🎯 Code Documentation
 🔄 Heading-Based Rotation
@@ -175,7 +181,8 @@ void Rotate_To_Heading(float target_heading, int car_speed, unsigned long timeou
 }
 ```
 ---
-###🛣️ Straight-Line Navigation
+---
+### 🛣️ Straight-Line Navigation
 ```
 void Adjust_Speeds_For_Straight_Motion(int lmcar_speed, int rmcar_speed, float target_heading) {
   float current_heading = getHeading();
@@ -189,7 +196,8 @@ void Adjust_Speeds_For_Straight_Motion(int lmcar_speed, int rmcar_speed, float t
 }
 ```
 ---
-###🧭 Compass Heading Acquisition
+---
+### 🧭 Compass Heading Acquisition
 ```
 float getHeading() {
   sensors_event_t event;
@@ -199,6 +207,7 @@ float getHeading() {
   return heading;
 }
 ```
+---
 ---
 ### 📊 Performance Analysis
 Parameter	Performance	Industry Standard
@@ -214,7 +223,7 @@ Navigation Accuracy: 98.7%
 Obstacle Avoidance: 100%
 
 ---
-
+---
 ### 🚀 Future Enhancements
 
 🤖 Machine Learning Integration — Neural networks for adaptive control
@@ -228,7 +237,7 @@ Obstacle Avoidance: 100%
 🤝 Multi-Robot Coordination — Swarm navigation algorithms
 
 ---
-
+---
 ### 📚 Research Applications
 
 This platform serves as a foundation for:
@@ -242,13 +251,13 @@ Sensor fusion algorithm development
 Real-time control systems study
 
 ---
-
+---
 ### 📜 License & Usage
 
 This project is licensed under the MIT License — see the LICENSE file for details.
 For academic or research use, please cite this repository appropriately.
 ---
-
+---
 ### 🙏 Acknowledgments
 
 AWS DeepRacer Team — for inspiration in autonomous systems
@@ -258,3 +267,5 @@ Competition Organizers — for the challenging course design
 Arduino Community — for technical resources
 
 Faculty Advisors — for guidance and support
+
+---

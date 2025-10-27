@@ -73,6 +73,7 @@ SENSOR INPUT → DATA FUSION → DECISION MAKING → MOTOR CONTROL → FEEDBACK 
    Readings    Algorithms     Logic        Signals     Feedback
 
 ```
+---
 ### Pin Configuration
 ```
 
@@ -89,6 +90,7 @@ SENSOR INPUT → DATA FUSION → DECISION MAKING → MOTOR CONTROL → FEEDBACK 
 #define COMPASS_I2C_ADDRESS 0x1E
 
 ```
+---
 ###⚡ Installation & Setup
 🧰 Prerequisites
 
@@ -97,7 +99,7 @@ Arduino IDE 1.8.19 or later
 Adafruit HMC5883 Unified Library
 
 TimerOne Library
-
+---
 
 ###🔌 Hardware Setup
 
@@ -113,7 +115,7 @@ Copy code
 Compass: I2C (SDA - A4, SCL - A5)
 Encoder: Interrupt Pin 2
 ```
-
+---
 ###📦 Library Installation
 
 #include <Arduino.h>
@@ -128,7 +130,7 @@ Install via Arduino Library Manager:
 Search “Adafruit HMC5883 Unified”
 
 Search “TimerOne”
-
+---
 ### 🧭 Calibration Procedure
 ```
 void setup() {
@@ -148,6 +150,7 @@ void setup() {
 }
 
 ```
+---
 ### 🎯 Code Documentation
 🔄 Heading-Based Rotation
 ```
@@ -171,7 +174,7 @@ void Rotate_To_Heading(float target_heading, int car_speed, unsigned long timeou
   STOP();
 }
 ```
-
+---
 ###🛣️ Straight-Line Navigation
 ```
 void Adjust_Speeds_For_Straight_Motion(int lmcar_speed, int rmcar_speed, float target_heading) {
@@ -185,7 +188,7 @@ void Adjust_Speeds_For_Straight_Motion(int lmcar_speed, int rmcar_speed, float t
   Move_Forward(adjusted_lmcar_speed, adjusted_rmcar_speed, target_heading);
 }
 ```
-
+---
 ###🧭 Compass Heading Acquisition
 ```
 float getHeading() {
@@ -196,6 +199,7 @@ float getHeading() {
   return heading;
 }
 ```
+---
 ### 📊 Performance Analysis
 Parameter	Performance	Industry Standard
 Heading Accuracy	±2°	±5°
@@ -209,6 +213,8 @@ Average Speed: 1.28 m/s
 Navigation Accuracy: 98.7%
 Obstacle Avoidance: 100%
 
+---
+
 ### 🚀 Future Enhancements
 
 🤖 Machine Learning Integration — Neural networks for adaptive control
@@ -220,6 +226,8 @@ Obstacle Avoidance: 100%
 🛰️ System Upgrades — ROS integration & wireless telemetry
 
 🤝 Multi-Robot Coordination — Swarm navigation algorithms
+
+---
 
 ### 📚 Research Applications
 
@@ -233,10 +241,13 @@ Sensor fusion algorithm development
 
 Real-time control systems study
 
+---
+
 ### 📜 License & Usage
 
 This project is licensed under the MIT License — see the LICENSE file for details.
 For academic or research use, please cite this repository appropriately.
+---
 
 ### 🙏 Acknowledgments
 

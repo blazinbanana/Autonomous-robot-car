@@ -22,7 +22,6 @@
 - [⚡ Installation & Setup](#-installation--setup)
 - [🎯 Code Documentation](#-code-documentation)
 - [📊 Performance Analysis](#-performance-analysis)
-- [🔄 Development Timeline](#-development-timeline)
 - [🚀 Future Enhancements](#-future-enhancements)
 - [📚 Research Applications](#-research-applications)
 - [🐛 Troubleshooting Guide](#-troubleshooting-guide)

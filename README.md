@@ -210,17 +210,24 @@ float getHeading() {
 ---
 ---
 ### 📊 Performance Analysis
-Parameter	Performance	Industry Standard
-Heading Accuracy	±2°	±5°
-Positional Precision	< 2 cm	5–10 cm
-Lap Consistency	99.2%	95%
-System Response Time	< 100 ms	200–500 ms
-// Course Completion Data
-Course Length: 45.7 meters
-Completion Time: 128 seconds
-Average Speed: 1.28 m/s
-Navigation Accuracy: 98.7%
-Obstacle Avoidance: 100%
+#### 🎯 Accuracy Metrics
+
+| **Parameter** | **Performance** | **Industry Standard** |
+|----------------|------------------|------------------------|
+| Heading Accuracy | ±2° | ±5° |
+| Positional Precision | < 2 cm | 5–10 cm |
+| Lap Consistency | 99.2% | 95% |
+| System Response Time | < 100 ms | 200–500 ms |
+
+---
+
+#### 🏁 Course Completion Data
+
+Course Length:       45.7 meters  
+Completion Time:     128 seconds  
+Average Speed:       1.28 m/s  
+Navigation Accuracy: 98.7%  
+Obstacle Avoidance:  100%
 
 ---
 ---
@@ -256,6 +263,7 @@ Real-time control systems study
 
 This project is licensed under the MIT License — see the LICENSE file for details.
 For academic or research use, please cite this repository appropriately.
+
 ---
 ---
 ### 🙏 Acknowledgments
